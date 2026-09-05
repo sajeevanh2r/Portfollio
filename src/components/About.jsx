@@ -10,6 +10,7 @@ import {
   Target
 } from 'lucide-react';
 import { educationData } from '../data/portfolioData';
+import TiltCard from './TiltCard';
 
 export default function About() {
   const pillars = [
@@ -57,35 +58,38 @@ export default function About() {
         {/* Dual Degree Feature Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
           {educationData.map((edu, idx) => (
-            <div
-              key={idx}
-              className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 relative overflow-hidden group hover:border-cyan-500/40 transition-all shadow-xl"
-            >
-              <div className="flex items-start justify-between gap-4 mb-4">
-                <div className="p-3 rounded-2xl bg-blue-500/10 text-cyan-400 border border-cyan-500/20">
-                  <GraduationCap className="w-6 h-6" />
-                </div>
-                <span className="text-xs font-mono px-3 py-1 rounded-full bg-slate-800 text-cyan-300 border border-slate-700">
-                  {edu.period}
-                </span>
-              </div>
-
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
-                {edu.degree}
-              </h3>
-              <p className="text-sm font-semibold text-blue-400 mb-4">
-                {edu.institution} — <span className="text-slate-400 font-normal">{edu.location}</span>
-              </p>
-
-              <div className="space-y-2 border-t border-slate-800/80 pt-4">
-                {edu.highlights.map((item, i) => (
-                  <div key={i} className="flex items-start gap-2 text-xs sm:text-sm text-slate-300">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
-                    <span>{item}</span>
+            <TiltCard key={idx} maxTilt={6} scale={1.02} className="h-full">
+              <div
+                className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 relative overflow-hidden group hover:border-cyan-500/40 transition-all shadow-xl h-full flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-start justify-between gap-4 mb-4">
+                    <div className="p-3 rounded-2xl bg-blue-500/10 text-cyan-400 border border-cyan-500/20">
+                      <GraduationCap className="w-6 h-6" />
+                    </div>
+                    <span className="text-xs font-mono px-3 py-1 rounded-full bg-slate-800 text-cyan-300 border border-slate-700">
+                      {edu.period}
+                    </span>
                   </div>
-                ))}
+
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                    {edu.degree}
+                  </h3>
+                  <p className="text-sm font-semibold text-blue-400 mb-4">
+                    {edu.institution} — <span className="text-slate-400 font-normal">{edu.location}</span>
+                  </p>
+
+                  <div className="space-y-2 border-t border-slate-800/80 pt-4">
+                    {edu.highlights.map((item, i) => (
+                      <div key={i} className="flex items-start gap-2 text-xs sm:text-sm text-slate-300">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-            </div>
+            </TiltCard>
           ))}
         </div>
 
@@ -94,35 +98,36 @@ export default function About() {
           {pillars.map((pillar, idx) => {
             const Icon = pillar.icon;
             return (
-              <div
-                key={idx}
-                className="glass-panel glass-panel-hover p-6 rounded-2xl border border-white/5 flex flex-col justify-between"
-              >
-                <div>
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${pillar.color} p-[1px] mb-5`}>
-                    <div className="w-full h-full bg-slate-950 rounded-[11px] flex items-center justify-center">
-                      <Icon className="w-6 h-6 text-white" />
+              <TiltCard key={idx} maxTilt={8} scale={1.02} className="h-full">
+                <div
+                  className="glass-panel glass-panel-hover p-6 rounded-2xl border border-white/5 flex flex-col justify-between h-full shadow-lg"
+                >
+                  <div>
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${pillar.color} p-[1px] mb-5`}>
+                      <div className="w-full h-full bg-slate-950 rounded-[11px] flex items-center justify-center">
+                        <Icon className="w-6 h-6 text-white" />
+                      </div>
                     </div>
+                    <h4 className="text-lg font-bold text-white mb-2">
+                      {pillar.title}
+                    </h4>
+                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-6">
+                      {pillar.description}
+                    </p>
                   </div>
-                  <h4 className="text-lg font-bold text-white mb-2">
-                    {pillar.title}
-                  </h4>
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-6">
-                    {pillar.description}
-                  </p>
-                </div>
 
-                <div className="flex flex-wrap gap-1.5 pt-4 border-t border-slate-800/60">
-                  {pillar.skills.map((s, i) => (
-                    <span
-                      key={i}
-                      className="px-2.5 py-1 rounded-lg bg-slate-900 text-[11px] font-mono text-slate-300 border border-slate-800"
-                    >
-                      {s}
-                    </span>
-                  ))}
+                  <div className="flex flex-wrap gap-1.5 pt-4 border-t border-slate-800/60">
+                    {pillar.skills.map((s, i) => (
+                      <span
+                        key={i}
+                        className="px-2.5 py-1 rounded-lg bg-slate-900 text-[11px] font-mono text-slate-300 border border-slate-800"
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </TiltCard>
             );
           })}
         </div>
