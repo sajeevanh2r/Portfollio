@@ -1,151 +1,107 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, FileText, ArrowRight, Sparkles, Terminal } from 'lucide-react';
-import { personalInfo } from '../data/portfolioData';
+
+const NAV_LINKS = [
+  { id: 'hero',       label: 'HOME',       code: '01' },
+  { id: 'projects',   label: 'MEMORY_CORE', code: '02' },
+  { id: 'skills',     label: 'NEURAL_CORE', code: '03' },
+  { id: 'about',      label: 'HUMAN_CORE',  code: '04' },
+  { id: 'experience', label: 'SYS_LOGS',   code: '05' },
+  { id: 'education',  label: 'UPGRADES',   code: '06' },
+  { id: 'contact',    label: 'CONNECT',    code: '07' },
+];
 
 export default function Navbar({ onOpenResume }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [active, setActive] = useState('hero');
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('hero');
-
-  const navLinks = [
-    { name: 'About', href: '#about' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Experience', href: '#experience' },
-    { name: 'Education', href: '#education' },
-    { name: 'References', href: '#references' },
-    { name: 'Contact', href: '#contact' },
-  ];
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-
-      const sections = ['hero', 'about', 'skills', 'projects', 'experience', 'education', 'references', 'contact'];
-      const scrollPosition = window.scrollY + 200;
-
-      for (const section of sections) {
-        const el = document.getElementById(section);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(section);
-            break;
-          }
+    const onScroll = () => {
+      setScrolled(window.scrollY > 30);
+      const scrollY = window.scrollY + 200;
+      for (const link of NAV_LINKS) {
+        const el = document.getElementById(link.id);
+        if (el && scrollY >= el.offsetTop && scrollY < el.offsetTop + el.offsetHeight) {
+          setActive(link.id);
         }
       }
     };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-slate-950/80 backdrop-blur-xl border-b border-white/10 shadow-lg shadow-black/40 py-3'
-          : 'bg-transparent py-5'
+        scrolled ? 'bg-[#050608]/90 backdrop-blur-md border-b border-cyan-500/10' : 'bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Brand */}
-        <a href="#hero" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 p-[1px] shadow-lg shadow-blue-500/20 group-hover:shadow-blue-500/40 transition-all">
-            <div className="w-full h-full bg-slate-950 rounded-[11px] flex items-center justify-center">
-              <span className="font-mono font-bold text-sm text-gradient">RS</span>
-            </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+
+        {/* Logo */}
+        <a href="#hero" className="flex items-center gap-3 group">
+          <div className="w-7 h-7 border border-cyan-500/60 flex items-center justify-center group-hover:border-cyan-400 transition-colors">
+            <span className="text-[10px] text-cyan-400 font-mono font-bold">RS</span>
           </div>
-          <div>
-            <div className="font-bold text-white tracking-tight text-base group-hover:text-cyan-400 transition-colors flex items-center gap-1.5">
-              <span>Sajeevan</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            </div>
-            <p className="text-[10px] font-mono text-slate-400 tracking-wider uppercase">Data & Mobile</p>
-          </div>
+          <span className="text-xs text-cyan-500/70 font-mono tracking-widest hidden sm:block">SAJEEVAN_OS</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
         </a>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-1 glass-pill px-3 py-1.5 rounded-full border border-white/10">
-          {navLinks.map((link) => {
-            const sectionId = link.href.substring(1);
-            const isActive = activeSection === sectionId;
+        <nav className="hidden lg:flex items-center gap-0.5">
+          {NAV_LINKS.map((link) => {
+            const isActive = active === link.id;
             return (
               <a
-                key={link.name}
-                href={link.href}
-                className={`px-3.5 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
+                key={link.id}
+                href={`#${link.id}`}
+                className={`px-3 py-1.5 text-[10px] tracking-widest transition-all font-mono ${
                   isActive
-                    ? 'text-white bg-white/10 shadow-sm border border-white/10'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                    ? 'text-cyan-400 border-b border-cyan-400'
+                    : 'text-slate-500 hover:text-slate-300'
                 }`}
               >
-                {link.name}
+                {isActive && <span className="text-cyan-600 mr-1">&gt;_</span>}
+                {link.label}
               </a>
             );
           })}
         </nav>
 
-        {/* Action Buttons */}
-        <div className="hidden lg:flex items-center gap-3">
+        {/* Right Actions */}
+        <div className="flex items-center gap-3">
           <button
             onClick={onOpenResume}
-            className="flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700/80 transition-all hover:border-slate-500 shadow-sm"
+            data-cursor="CV"
+            className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-[10px] tracking-widest font-mono text-cyan-400 border border-cyan-500/40 hover:border-cyan-400 hover:bg-cyan-500/5 transition-all"
           >
-            <FileText className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Resume</span>
+            [ VIEW CV ]
           </button>
-          <a
-            href="#contact"
-            className="flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 via-sky-500 to-cyan-400 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
-          >
-            <span>Let's Connect</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </a>
-        </div>
 
-        {/* Mobile menu trigger */}
-        <div className="flex md:hidden items-center gap-2">
+          {/* Mobile toggle */}
           <button
-            onClick={onOpenResume}
-            className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300"
-            aria-label="View Resume"
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="lg:hidden text-cyan-500 font-mono text-xs border border-cyan-500/30 px-2 py-1"
           >
-            <FileText className="w-4 h-4 text-cyan-400" />
-          </button>
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white"
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {menuOpen ? '[ X ]' : '[ ≡ ]'}
           </button>
         </div>
       </div>
 
       {/* Mobile Drawer */}
-      {isOpen && (
-        <div className="md:hidden glass-panel border-b border-white/10 mt-2 px-4 py-4 space-y-2 animate-fadeIn">
-          {navLinks.map((link) => (
+      {menuOpen && (
+        <div className="lg:hidden bg-[#050608]/95 backdrop-blur border-b border-cyan-500/15 px-4 py-4 space-y-1">
+          {NAV_LINKS.map((link) => (
             <a
-              key={link.name}
-              href={link.href}
-              onClick={() => setIsOpen(false)}
-              className="block px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors"
+              key={link.id}
+              href={`#${link.id}`}
+              onClick={() => setMenuOpen(false)}
+              className="block py-2 text-xs font-mono text-slate-400 hover:text-cyan-400 transition-colors tracking-widest border-b border-slate-900"
             >
-              {link.name}
+              <span className="text-cyan-600/50 mr-2">{link.code}</span>
+              {link.label}
             </a>
           ))}
-          <div className="pt-2 border-t border-slate-800 flex gap-2">
-            <a
-              href="#contact"
-              onClick={() => setIsOpen(false)}
-              className="w-full text-center py-2.5 rounded-xl bg-blue-600 text-white text-xs font-semibold"
-            >
-              Contact Me
-            </a>
-          </div>
         </div>
       )}
     </header>

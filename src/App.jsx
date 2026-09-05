@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import SystemBoot from './components/SystemBoot';
+import CustomCursor from './components/CustomCursor';
 import BackgroundCanvas from './components/BackgroundCanvas';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -14,33 +16,43 @@ import Footer from './components/Footer';
 import ResumeModal from './components/ResumeModal';
 
 export default function App() {
+  const [booted, setBooted] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 relative selection:bg-cyan-500/30 selection:text-cyan-200">
-      {/* Dynamic Animated Canvas Background */}
+    <div className="min-h-screen bg-[#050608] text-slate-100 relative font-mono selection:bg-cyan-500/30 selection:text-cyan-200">
+      
+      {/* Custom Targeting Crosshair Cursor */}
+      <CustomCursor />
+
+      {/* System Boot Sequence (Plays on first visit) */}
+      {!booted && (
+        <SystemBoot onComplete={() => setBooted(true)} />
+      )}
+
+      {/* Ambient Circuit Grid & Data Streams */}
       <BackgroundCanvas />
 
-      {/* Glassmorphic Navbar */}
+      {/* Minimal Robotic Navbar */}
       <Navbar onOpenResume={() => setIsResumeOpen(true)} />
 
-      {/* Main Content Sections */}
+      {/* Core Interface Sections */}
       <main className="relative z-10">
         <Hero onOpenResume={() => setIsResumeOpen(true)} />
-        <About />
-        <Skills />
         <Projects onSelectProject={(project) => setSelectedProject(project)} />
+        <Skills />
+        <About />
         <Experience />
         <Education />
         <References />
         <Contact />
       </main>
 
-      {/* Footer */}
+      {/* Minimal Robotic Footer */}
       <Footer />
 
-      {/* Interactive Project Architecture Modal */}
+      {/* Holographic Project Modal */}
       {selectedProject && (
         <ProjectModal
           project={selectedProject}
@@ -48,7 +60,7 @@ export default function App() {
         />
       )}
 
-      {/* Interactive Curriculum Vitae / Resume Modal */}
+      {/* Terminal Curriculum Vitae Modal */}
       {isResumeOpen && (
         <ResumeModal onClose={() => setIsResumeOpen(false)} />
       )}

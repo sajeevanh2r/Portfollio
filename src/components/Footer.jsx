@@ -1,7 +1,6 @@
 import React from 'react';
-import { ArrowUp, Heart, Mail, Sparkles } from 'lucide-react';
-import { LinkedinIcon, GithubIcon } from './SocialIcons';
 import { personalInfo } from '../data/portfolioData';
+import { LinkedinIcon, GithubIcon } from './SocialIcons';
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -9,31 +8,26 @@ export default function Footer() {
   };
 
   return (
-    <footer className="py-12 relative z-10 border-t border-slate-900 bg-slate-950">
+    <footer className="py-8 relative z-10 border-t border-cyan-500/10 bg-[#050608]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono">
           
-          {/* Brand */}
-          <div className="flex items-center gap-3 text-center md:text-left">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 p-[1px]">
-              <div className="w-full h-full bg-slate-950 rounded-[11px] flex items-center justify-center font-mono font-bold text-xs text-gradient">
-                RS
-              </div>
-            </div>
-            <div>
-              <p className="font-bold text-sm text-white">{personalInfo.name}</p>
-              <p className="text-[11px] text-slate-400 font-mono">Data Science & Management Information Systems</p>
-            </div>
+          {/* Identity */}
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-cyan-400" />
+            <span className="text-slate-400">SAJEEVAN_OS // v2.6.0</span>
+            <span className="text-slate-700">|</span>
+            <span className="text-slate-500">ROBOTIC IDENTITY ACTIVE</span>
           </div>
 
-          {/* Social Links */}
-          <div className="flex items-center gap-3">
+          {/* Socials */}
+          <div className="flex items-center gap-4">
             <a
               href={personalInfo.github}
               target="_blank"
               rel="noreferrer"
-              className="p-2 rounded-xl bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-              aria-label="GitHub"
+              data-cursor="GITHUB"
+              className="text-slate-500 hover:text-cyan-400 transition-colors"
             >
               <GithubIcon className="w-4 h-4" />
             </a>
@@ -41,31 +35,17 @@ export default function Footer() {
               href={personalInfo.linkedin}
               target="_blank"
               rel="noreferrer"
-              className="p-2 rounded-xl bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-              aria-label="LinkedIn"
+              data-cursor="LINKEDIN"
+              className="text-slate-500 hover:text-cyan-400 transition-colors"
             >
               <LinkedinIcon className="w-4 h-4" />
             </a>
-            <a
-              href={`mailto:${personalInfo.email}`}
-              className="p-2 rounded-xl bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-              aria-label="Email"
-            >
-              <Mail className="w-4 h-4" />
-            </a>
-          </div>
-
-          {/* Back to Top */}
-          <div className="flex items-center gap-4">
-            <p className="text-xs text-slate-300 font-mono">
-              © {new Date().getFullYear()} Sajeevan. All rights reserved.
-            </p>
             <button
               onClick={scrollToTop}
-              className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-cyan-400 hover:border-cyan-500/40 transition-all shadow-md"
-              aria-label="Back to Top"
+              data-cursor="TOP"
+              className="text-[10px] text-cyan-500/70 hover:text-cyan-400 border border-cyan-500/20 px-2 py-0.5 transition-colors"
             >
-              <ArrowUp className="w-4 h-4" />
+              [ ^ TOP ]
             </button>
           </div>
 

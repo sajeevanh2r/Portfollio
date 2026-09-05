@@ -8,47 +8,52 @@ export default {
   theme: {
     extend: {
       colors: {
-        brand: {
-          50: '#eef8ff',
-          100: '#d8eeff',
-          200: '#b9e0ff',
-          300: '#89cbff',
-          400: '#52acff',
-          500: '#2b8aff',
-          600: '#1468f5',
-          700: '#0d51e1',
-          800: '#1142b6',
-          900: '#133a8f',
-          950: '#0b2053',
-        },
-        emerald: {
-          glow: '#10b981'
-        },
-        cyan: {
-          glow: '#06b6d4'
-        },
-        violet: {
-          glow: '#8b5cf6'
+        robot: {
+          bg: '#050608',
+          panel: '#0d1017',
+          border: 'rgba(34, 211, 238, 0.15)',
+          cyan: '#22d3ee',
+          'cyan-dim': '#164e63',
+          'cyan-bright': '#67e8f9',
+          slate: '#64748b',
+          rose: '#f43f5e',
+          green: '#10b981',
+          amber: '#f59e0b',
         }
       },
       fontFamily: {
-        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+        mono: ['JetBrains Mono', 'Fira Code', 'Courier New', 'monospace'],
+        sans: ['JetBrains Mono', 'monospace'],
       },
       animation: {
-        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'float': 'float 6s ease-in-out infinite',
-        'gradient': 'gradient 8s linear infinite',
+        'float': 'floatY 5s ease-in-out infinite',
+        'blink': 'blink 1s step-start infinite',
+        'glitch': 'glitch 3s infinite step-start',
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'spin-slow': 'spin 8s linear infinite',
+        'node-glow': 'nodeGlow 2s ease-in-out infinite',
+        'hologram': 'hologram 4s step-start infinite',
+        'scan': 'scan 3s linear infinite',
       },
       keyframes: {
-        float: {
+        floatY: {
           '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-10px)' },
+          '50%': { transform: 'translateY(-8px)' },
         },
-        gradient: {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
-        }
+        blink: {
+          '0%, 100%': { opacity: 1 },
+          '50%': { opacity: 0 },
+        },
+        scan: {
+          '0%': { backgroundPosition: '0 0' },
+          '100%': { backgroundPosition: '0 100%' },
+        },
+      },
+      backgroundImage: {
+        'circuit': "linear-gradient(rgba(34, 211, 238, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, 0.04) 1px, transparent 1px)",
+      },
+      backgroundSize: {
+        'circuit': '40px 40px',
       }
     },
   },

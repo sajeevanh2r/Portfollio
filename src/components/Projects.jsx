@@ -1,180 +1,125 @@
 import React, { useState } from 'react';
-import {
-  FolderGit2,
-  Search,
-  ExternalLink,
-  Calendar,
-  Layers,
-  ArrowRight,
-  Filter,
-  Sparkles,
-  Info
-} from 'lucide-react';
-import { GithubIcon } from './SocialIcons';
 import { projectsData, personalInfo } from '../data/portfolioData';
-import TiltCard from './TiltCard';
+import { GithubIcon } from './SocialIcons';
+
+const CATEGORIES = ['ALL', 'AI & Data Science', 'Mobile Apps', 'Dashboards & BI', 'Full Stack & Web'];
 
 export default function Projects({ onSelectProject }) {
-  const [activeCategory, setActiveCategory] = useState('All');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [filter, setFilter] = useState('ALL');
+  const [search, setSearch] = useState('');
 
-  const categories = [
-    'All',
-    'AI & Data Science',
-    'Mobile Apps',
-    'Dashboards & BI',
-    'Full Stack & Web'
-  ];
-
-  const filteredProjects = projectsData.filter((project) => {
-    const matchesCategory =
-      activeCategory === 'All' || project.category === activeCategory;
-    const matchesSearch =
-      project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.stack.some((tech) =>
-        tech.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    return matchesCategory && matchesSearch;
+  const filtered = projectsData.filter(p => {
+    const matchCat = filter === 'ALL' || p.category === filter;
+    const q = search.toLowerCase();
+    const matchSearch = !q || p.title.toLowerCase().includes(q) || p.stack.some(s => s.toLowerCase().includes(q));
+    return matchCat && matchSearch;
   });
 
   return (
-    <section id="projects" className="py-24 relative z-10 border-t border-slate-900">
+    <section id="projects" className="py-24 relative z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-pill text-cyan-400 text-xs font-mono mb-3">
-            <FolderGit2 className="w-3.5 h-3.5" />
-            <span>Featured Engineering Work</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Featured <span className="text-gradient">Projects & Pipelines</span>
+
+        {/* Section Header */}
+        <div className="mb-12">
+          <div className="text-[10px] font-mono text-cyan-500/50 tracking-widest mb-2">// SECTION_02</div>
+          <h2 className="text-3xl sm:text-4xl font-black font-mono text-white tracking-tight">
+            MEMORY<span className="text-cyan-400">_CORE</span>
           </h2>
-          <p className="mt-3 text-slate-300 text-sm sm:text-base">
-            Explore 10 curated systems spanning Machine Learning pipelines, RAG assistants, Flutter mobile apps, and enterprise data solutions.
+          <p className="mt-2 text-sm font-mono text-slate-500">
+            &gt;_ 10 projects loaded. Select to expand.
           </p>
         </div>
 
-        {/* Filters & Search Toolbar */}
-        <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-10">
-          {/* Category Chips */}
-          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
-            {categories.map((cat) => (
+        {/* Filter toolbar */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-8">
+          <div className="flex flex-wrap gap-2">
+            {CATEGORIES.map(cat => (
               <button
                 key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all ${
-                  activeCategory === cat
-                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
-                    : 'glass-pill text-slate-300 hover:text-white hover:bg-slate-800'
+                onClick={() => setFilter(cat)}
+                data-cursor="FILTER"
+                className={`px-3 py-1 text-[10px] font-mono tracking-widest transition-all border ${
+                  filter === cat
+                    ? 'border-cyan-400 text-cyan-400 bg-cyan-500/10'
+                    : 'border-slate-800 text-slate-500 hover:border-slate-600 hover:text-slate-300'
                 }`}
               >
-                {cat}
+                {cat === 'ALL' ? '[ ALL ]' : cat.toUpperCase()}
               </button>
             ))}
           </div>
-
-          {/* Search Input */}
-          <div className="relative w-full md:w-72">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Search stack or keywords..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors"
-            />
-          </div>
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="> SEARCH STACK..."
+            className="sm:ml-auto px-3 py-1.5 text-[11px] font-mono bg-transparent border border-slate-800 text-slate-300 placeholder-slate-700 focus:outline-none focus:border-cyan-500/50 w-full sm:w-56 transition-colors"
+          />
         </div>
 
-        {/* Projects Grid */}
-        {filteredProjects.length === 0 ? (
-          <div className="glass-panel p-12 rounded-3xl text-center">
-            <p className="text-slate-400 text-sm">No projects matching your search criteria.</p>
-            <button
-              onClick={() => {
-                setActiveCategory('All');
-                setSearchQuery('');
-              }}
-              className="mt-4 px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-semibold"
+        {/* Project Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-cyan-500/5">
+          {filtered.map((project, i) => (
+            <div
+              key={project.id}
+              className="bg-[#050608] hover:bg-[#0d1017] transition-colors border border-transparent hover:border-cyan-500/20 p-6 group"
+              onClick={() => onSelectProject(project)}
+              data-cursor="OPEN"
+              style={{ cursor: 'none' }}
             >
-              Reset Filters
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((project) => (
-              <TiltCard key={project.id} maxTilt={6} scale={1.02} className="h-full">
-                <div
-                  className="glass-panel glass-panel-hover rounded-3xl border border-white/5 p-6 sm:p-7 flex flex-col justify-between group relative overflow-hidden h-full shadow-lg"
+              {/* Project index */}
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[9px] font-mono text-cyan-500/40 tracking-widest">
+                  [PROJECT_{String(i + 1).padStart(3, '0')}]
+                </span>
+                <span className="text-[9px] font-mono text-slate-700">{project.year}</span>
+              </div>
+
+              {/* Title */}
+              <h3 className="text-sm font-bold font-mono text-slate-200 group-hover:text-cyan-400 transition-colors mb-2 leading-tight">
+                {project.title.toUpperCase()}
+              </h3>
+
+              {/* Summary */}
+              <p className="text-[11px] font-mono text-slate-500 line-clamp-2 mb-4 leading-relaxed">
+                {project.summary}
+              </p>
+
+              {/* Stack pills */}
+              <div className="flex flex-wrap gap-1 mb-4">
+                {project.stack.slice(0, 3).map((tech, idx) => (
+                  <span key={idx} className="text-[9px] font-mono text-cyan-500/60 border border-cyan-500/15 px-1.5 py-0.5">
+                    {tech}
+                  </span>
+                ))}
+                {project.stack.length > 3 && (
+                  <span className="text-[9px] font-mono text-slate-600">+{project.stack.length - 3}</span>
+                )}
+              </div>
+
+              {/* Open signal */}
+              <div className="flex items-center justify-between border-t border-slate-900 pt-3">
+                <span className="text-[9px] font-mono text-slate-700 group-hover:text-cyan-500/60 transition-colors tracking-widest">
+                  &gt; CLICK TO EXPAND
+                </span>
+                <a
+                  href={personalInfo.github}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={e => e.stopPropagation()}
+                  className="text-slate-700 hover:text-slate-300 transition-colors"
+                  data-cursor="GITHUB"
                 >
-                  {/* Top Badge Strip */}
-                  <div>
-                    <div className="flex items-center justify-between gap-2 mb-4">
-                      <span className="px-2.5 py-1 rounded-full text-[11px] font-mono font-semibold bg-blue-500/10 text-cyan-400 border border-cyan-500/20">
-                        {project.badge || project.category}
-                      </span>
-                      <span className="text-[11px] font-mono text-slate-400 flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
-                        {project.year}
-                      </span>
-                    </div>
+                  <GithubIcon className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
 
-                    {/* Title */}
-                    <h3 className="text-lg font-bold text-white mb-2.5 group-hover:text-cyan-300 transition-colors">
-                      {project.title}
-                    </h3>
-
-                    {/* Summary */}
-                    <p className="text-xs sm:text-sm text-slate-300 line-clamp-3 mb-5 leading-relaxed">
-                      {project.summary}
-                    </p>
-                  </div>
-
-                  {/* Bottom Tech & Actions */}
-                  <div>
-                    {/* Tech stack pills */}
-                    <div className="flex flex-wrap gap-1.5 mb-5">
-                      {project.stack.slice(0, 4).map((tech, idx) => (
-                        <span
-                          key={idx}
-                          className="px-2 py-0.5 rounded-lg bg-slate-900 text-[11px] font-mono text-slate-300 border border-slate-800"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                      {project.stack.length > 4 && (
-                        <span className="px-2 py-0.5 rounded-lg bg-slate-900 text-[11px] font-mono text-slate-400 border border-slate-800">
-                          +{project.stack.length - 4} more
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Action Link to Modal */}
-                    <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between">
-                      <button
-                        onClick={() => onSelectProject(project)}
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-400 group-hover:text-cyan-300 transition-colors"
-                      >
-                        <Info className="w-3.5 h-3.5" />
-                        <span>View Architecture</span>
-                      </button>
-
-                      <a
-                        href={personalInfo.github}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="p-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-                        title="GitHub"
-                      >
-                        <GithubIcon className="w-4 h-4" />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </TiltCard>
-            ))}
+        {filtered.length === 0 && (
+          <div className="py-16 text-center text-sm font-mono text-slate-600">
+            &gt; NO_RESULTS_FOUND // ADJUST FILTER
           </div>
         )}
 
