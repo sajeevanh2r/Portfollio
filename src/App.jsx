@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import SystemBoot from './components/SystemBoot';
-import CustomCursor from './components/CustomCursor';
+import Gateway from './components/Gateway';
 import BackgroundCanvas from './components/BackgroundCanvas';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -16,43 +15,39 @@ import Footer from './components/Footer';
 import ResumeModal from './components/ResumeModal';
 
 export default function App() {
-  const [booted, setBooted] = useState(false);
+  const [entered, setEntered] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#050608] text-slate-100 relative font-mono selection:bg-cyan-500/30 selection:text-cyan-200">
+    <div className="min-h-screen bg-[#08090d] text-slate-100 relative selection:bg-cyan-500/30 selection:text-cyan-200">
       
-      {/* Custom Targeting Crosshair Cursor */}
-      <CustomCursor />
-
-      {/* System Boot Sequence (Plays on first visit) */}
-      {!booted && (
-        <SystemBoot onComplete={() => setBooted(true)} />
+      {/* Cinematic Opening Gateway */}
+      {!entered && (
+        <Gateway onEnter={() => setEntered(true)} />
       )}
 
-      {/* Ambient Circuit Grid & Data Streams */}
+      {/* Subtle Deep Space Particles & Atmospheric Canvas */}
       <BackgroundCanvas />
 
-      {/* Minimal Robotic Navbar */}
+      {/* Frosted Glass Cinematic Navbar */}
       <Navbar onOpenResume={() => setIsResumeOpen(true)} />
 
-      {/* Core Interface Sections */}
+      {/* Main Experience Flow */}
       <main className="relative z-10">
         <Hero onOpenResume={() => setIsResumeOpen(true)} />
+        <About />
         <Projects onSelectProject={(project) => setSelectedProject(project)} />
         <Skills />
-        <About />
         <Experience />
-        <Education />
         <References />
         <Contact />
       </main>
 
-      {/* Minimal Robotic Footer */}
+      {/* Footer */}
       <Footer />
 
-      {/* Holographic Project Modal */}
+      {/* Case Study Deep-Dive Modal */}
       {selectedProject && (
         <ProjectModal
           project={selectedProject}
@@ -60,7 +55,7 @@ export default function App() {
         />
       )}
 
-      {/* Terminal Curriculum Vitae Modal */}
+      {/* Curriculum Vitae Modal */}
       {isResumeOpen && (
         <ResumeModal onClose={() => setIsResumeOpen(false)} />
       )}

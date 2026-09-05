@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { personalInfo } from '../data/portfolioData';
+import { X, ExternalLink, CheckCircle2, Calendar, Layers, ArrowUpRight, Target, Lightbulb, Wrench, Trophy } from 'lucide-react';
 import { GithubIcon } from './SocialIcons';
+import { personalInfo } from '../data/portfolioData';
 
 export default function ProjectModal({ project, onClose }) {
   useEffect(() => {
@@ -22,59 +23,65 @@ export default function ProjectModal({ project, onClose }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/85 backdrop-blur-md transition-opacity"
+        className="fixed inset-0 bg-[#08090d]/85 backdrop-blur-xl transition-opacity"
         onClick={onClose}
       />
 
-      {/* Modal Terminal Card */}
-      <div className="relative w-full max-w-2xl bg-[#0a0c10] border border-cyan-500/40 rounded-none shadow-2xl overflow-hidden z-10 my-8">
+      {/* Modal Container */}
+      <div className="relative w-full max-w-2xl bg-[#0d1017] border border-white/10 rounded-3xl shadow-2xl overflow-hidden z-10 my-8 animate-scaleUp">
         
-        {/* Terminal Header */}
-        <div className="p-4 sm:p-6 bg-black/80 border-b border-cyan-500/20 flex items-start justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 text-[9px] font-mono font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-                {project.badge || project.category}
-              </span>
-              <span className="text-[10px] font-mono text-slate-500">
-                YEAR: {project.year}
-              </span>
+        {/* Header */}
+        <div className="p-6 sm:p-8 bg-gradient-to-r from-blue-900/30 via-slate-900 to-indigo-900/30 border-b border-white/5">
+          <div className="flex items-start justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-cyan-500/15 text-cyan-300 border border-cyan-500/25">
+                  {project.badge || project.category}
+                </span>
+                <span className="text-xs font-mono text-slate-400 flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5" />
+                  {project.year}
+                </span>
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight pt-1">
+                {project.title}
+              </h3>
             </div>
-            <h3 className="text-xl sm:text-2xl font-bold font-mono text-white tracking-tight pt-1">
-              {project.title.toUpperCase()}
-            </h3>
-          </div>
 
-          <button
-            onClick={onClose}
-            data-cursor="CLOSE"
-            className="p-1.5 border border-slate-800 hover:border-cyan-400 text-slate-500 hover:text-cyan-400 font-mono text-xs transition-colors"
-          >
-            [ X ]
-          </button>
+            <button
+              onClick={onClose}
+              className="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+              aria-label="Close"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Content Body */}
         <div className="p-6 sm:p-8 space-y-6 max-h-[70vh] overflow-y-auto">
-          {/* Overview */}
+          
+          {/* What & Why I Built It */}
           <div>
-            <p className="text-[9px] font-mono text-cyan-500/50 tracking-widest uppercase mb-2">
-              // ARCHITECTURE_OVERVIEW
-            </p>
-            <p className="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed">
+            <h4 className="text-xs font-mono uppercase text-cyan-400 tracking-wider mb-2 flex items-center gap-1.5 font-bold">
+              <Lightbulb className="w-3.5 h-3.5" />
+              <span>What I Built & Why</span>
+            </h4>
+            <p className="text-sm sm:text-base text-slate-200 leading-relaxed">
               {project.description || project.summary}
             </p>
           </div>
 
-          {/* Highlights */}
+          {/* Key Achievements */}
           {project.highlights && project.highlights.length > 0 && (
-            <div className="space-y-2 p-4 border border-cyan-500/15 bg-black/40">
-              <p className="text-[9px] font-mono text-cyan-400 tracking-widest uppercase mb-2">
-                // SYSTEM_METRICS & ACHIEVEMENTS
-              </p>
+            <div className="space-y-2.5 bg-black/40 p-5 rounded-2xl border border-white/5">
+              <h4 className="text-xs font-mono uppercase text-emerald-400 tracking-wider mb-3 flex items-center gap-1.5 font-bold">
+                <Trophy className="w-3.5 h-3.5" />
+                <span>Key Technical Highlights</span>
+              </h4>
               {project.highlights.map((item, idx) => (
-                <div key={idx} className="flex items-start gap-2 text-xs font-mono text-slate-400 leading-relaxed">
-                  <span className="text-cyan-500/60 shrink-0">&gt;&gt;</span>
+                <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-300">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
                   <span>{item}</span>
                 </div>
               ))}
@@ -83,26 +90,28 @@ export default function ProjectModal({ project, onClose }) {
 
           {/* Tech Stack */}
           <div>
-            <p className="text-[9px] font-mono text-cyan-500/50 tracking-widest uppercase mb-2">
-              // TECH_STACK
-            </p>
-            <div className="flex flex-wrap gap-1.5">
+            <h4 className="text-xs font-mono uppercase text-slate-400 tracking-wider mb-3 flex items-center gap-1.5 font-bold">
+              <Wrench className="w-3.5 h-3.5 text-blue-400" />
+              <span>Technologies & Tools</span>
+            </h4>
+            <div className="flex flex-wrap gap-2">
               {project.stack.map((tech, idx) => (
                 <span
                   key={idx}
-                  className="px-2.5 py-1 bg-black text-[10px] font-mono text-cyan-300 border border-cyan-500/20"
+                  className="px-3 py-1.5 rounded-xl bg-slate-900 text-xs font-mono text-cyan-300 border border-slate-800 font-medium"
                 >
                   {tech}
                 </span>
               ))}
             </div>
           </div>
+
         </div>
 
-        {/* Modal Footer Actions */}
-        <div className="p-4 bg-black/80 border-t border-cyan-500/20 flex flex-wrap items-center justify-between gap-3">
-          <span className="text-[9px] font-mono text-slate-600">
-            SYSTEM_ID: {project.id}
+        {/* Footer */}
+        <div className="p-5 sm:p-6 bg-black/50 border-t border-white/5 flex flex-wrap items-center justify-between gap-3">
+          <span className="text-xs text-slate-400 font-mono">
+            Category: <strong className="text-slate-200">{project.category}</strong>
           </span>
 
           <div className="flex items-center gap-2">
@@ -110,22 +119,22 @@ export default function ProjectModal({ project, onClose }) {
               href={personalInfo.github}
               target="_blank"
               rel="noreferrer"
-              data-cursor="GITHUB"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono text-slate-300 border border-slate-700 hover:border-cyan-400 hover:text-cyan-400 transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition-colors"
             >
-              <GithubIcon className="w-3.5 h-3.5" />
-              <span>[ GITHUB ]</span>
+              <GithubIcon className="w-4 h-4" />
+              <span>View on GitHub</span>
+              <ArrowUpRight className="w-3.5 h-3.5 text-slate-400" />
             </a>
 
             <button
               onClick={onClose}
-              data-cursor="DONE"
-              className="px-4 py-1.5 bg-cyan-400 text-[#050608] text-xs font-mono font-bold hover:bg-cyan-300 transition-colors"
+              className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-colors"
             >
-              [ CLOSE ]
+              Done
             </button>
           </div>
         </div>
+
       </div>
     </div>
   );

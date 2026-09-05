@@ -1,121 +1,98 @@
-import React, { useState } from 'react';
-import { personalInfo } from '../data/portfolioData';
-
-const HUMAN_DATA = [
-  { key: 'DESIGNATION', value: 'RADHAKRISHNAN SAJEEVAN' },
-  { key: 'UNIT_TYPE', value: 'HUMAN // DEVELOPER' },
-  { key: 'LOCATION_NODE', value: 'COLOMBO, SRI LANKA' },
-  { key: 'PRIMARY_DRIVE', value: 'BUILD. LEARN. EVOLVE.' },
-  { key: 'DEGREE_ALPHA', value: 'BSc MIS — NSBM (2022–2026)' },
-  { key: 'DEGREE_BETA', value: 'BSc DATA SCIENCE — NIBM (2024–2027)' },
-];
-
-const INTERESTS = [
-  'MACHINE LEARNING', 'MOBILE ENGINEERING', 'RAG SYSTEMS',
-  'DATA VISUALIZATION', 'WEB ARCHITECTURE', 'AI RESEARCH',
-  'OPEN SOURCE', 'SYSTEM DESIGN',
-];
+import React from 'react';
+import { GraduationCap, Sparkles, CheckCircle2, Heart, Code2, Compass, Layers } from 'lucide-react';
+import { educationData, personalInfo } from '../data/portfolioData';
 
 export default function About() {
-  const [revealed, setRevealed] = useState(false);
+  const values = [
+    {
+      title: "Curiosity-Driven Engineering",
+      desc: "I love understanding how things work under the hood — whether dissecting loss curves in PyTorch or optimizing widget trees in Flutter.",
+      icon: Sparkles
+    },
+    {
+      title: "Data Grounded in Reality",
+      desc: "Data is only as good as its integrity. From high-volume title records to vector embeddings, accuracy and validation come first.",
+      icon: Layers
+    },
+    {
+      title: "Scalable Full-Cycle Delivery",
+      desc: "Bridging the gap between predictive ML models, cloud APIs, and responsive user interfaces that people actually enjoy using.",
+      icon: Code2
+    }
+  ];
 
   return (
-    <section id="about" className="py-24 relative z-10 border-t border-cyan-500/8">
+    <section id="about" className="py-24 relative z-10 border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
+        
         {/* Header */}
-        <div className="mb-12">
-          <div className="text-[10px] font-mono text-cyan-500/50 tracking-widest mb-2">// SECTION_04</div>
-          <h2 className="text-3xl sm:text-4xl font-black font-mono text-white">
-            HUMAN<span className="text-cyan-400">_CORE</span>
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full cinematic-pill text-cyan-400 text-xs font-mono mb-3">
+            <Compass className="w-3.5 h-3.5" />
+            <span>MY STORY</span>
+          </div>
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+            This Is <span className="text-gradient-cyan">Me</span>
           </h2>
-          <p className="mt-2 text-sm font-mono text-slate-500">
-            &gt;_ Machine outside. Human inside.
+          <p className="mt-4 text-slate-300 text-base leading-relaxed">
+            I'm a dual-degree undergraduate based in Colombo, blending computational Data Science with Enterprise Information Systems.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-          {/* Left: Robot chest reveal visual */}
-          <div className="lg:col-span-4 flex flex-col items-center">
+        {/* Dual Degree Spotlight Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto mb-16">
+          {educationData.map((edu, idx) => (
             <div
-              className={`relative w-full max-w-[280px] transition-all duration-700 ${revealed ? 'opacity-100' : 'opacity-80'}`}
+              key={idx}
+              className="cinematic-card p-8 rounded-3xl relative overflow-hidden group"
             >
-              {/* Robot "chest" container */}
-              <div className="terminal-panel p-6 text-center space-y-4 relative overflow-hidden border-cyan-500/30">
-
-                {/* Glowing human core orb */}
-                <div className="relative flex items-center justify-center py-6">
-                  <div className={`w-24 h-24 rounded-full border-2 transition-all duration-700 ${revealed ? 'border-cyan-400 shadow-[0_0_40px_rgba(34,211,238,0.5)]' : 'border-cyan-500/30'} flex items-center justify-center`}>
-                    <div className={`w-16 h-16 rounded-full transition-all duration-700 ${revealed ? 'bg-cyan-400/20' : 'bg-cyan-500/5'} flex items-center justify-center`}>
-                      <div className={`w-8 h-8 rounded-full transition-all duration-700 ${revealed ? 'bg-cyan-400 animate-pulse' : 'bg-cyan-500/20'}`} />
-                    </div>
-                  </div>
-                  {/* Ring orbits */}
-                  <div className={`absolute w-32 h-32 rounded-full border border-cyan-500/20 animate-spin-slow`} />
-                  <div className={`absolute w-40 h-40 rounded-full border border-cyan-500/10`} style={{ animationDuration: '12s', animationDirection: 'reverse' }} />
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <div className="p-3 rounded-2xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                  <GraduationCap className="w-6 h-6" />
                 </div>
-
-                <p className="text-[10px] font-mono text-cyan-500/60 tracking-widest">CORE_UNIT</p>
-                <p className="text-xs font-mono font-bold text-white">RADHAKRISHNAN SAJEEVAN</p>
-                <p className="text-[10px] font-mono text-slate-500">HUMAN // OPERATIONAL</p>
-
-                <button
-                  onClick={() => setRevealed(r => !r)}
-                  data-cursor="REVEAL"
-                  className="w-full py-2 text-[10px] font-mono tracking-widest border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/5 transition-all"
-                >
-                  {revealed ? '[ SEAL_CORE ]' : '[ REVEAL_CORE ]'}
-                </button>
-
-                {/* Scanlines */}
-                <div className="absolute inset-0 scanlines pointer-events-none" />
+                <span className="text-xs font-mono px-3 py-1 rounded-full cinematic-pill text-cyan-300">
+                  {edu.period}
+                </span>
               </div>
-            </div>
-          </div>
 
-          {/* Right: Human data readout */}
-          <div className="lg:col-span-8 space-y-3">
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                {edu.degree}
+              </h3>
+              <p className="text-sm font-semibold text-blue-400 mb-4">
+                {edu.institution} — <span className="text-slate-400 font-normal">{edu.location}</span>
+              </p>
 
-            {/* Data fields */}
-            <div className="terminal-panel rounded-none">
-              <div className="border-b border-cyan-500/10 px-4 py-2 text-[9px] font-mono text-cyan-500/50 tracking-widest">
-                HUMAN_CORE // DATA_READOUT
-              </div>
-              <div className="divide-y divide-slate-900">
-                {HUMAN_DATA.map((item, i) => (
-                  <div key={i} className="flex items-baseline gap-4 px-4 py-2.5">
-                    <span className="text-[9px] font-mono text-slate-600 w-32 shrink-0 tracking-widest">{item.key}</span>
-                    <span className="text-xs font-mono text-slate-200">{item.value}</span>
+              <div className="space-y-2 border-t border-white/5 pt-4">
+                {edu.highlights.map((item, i) => (
+                  <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-300">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
+                    <span>{item}</span>
                   </div>
                 ))}
               </div>
             </div>
+          ))}
+        </div>
 
-            {/* Bio / Mission */}
-            <div className="terminal-panel rounded-none p-4 border-l-2 border-l-cyan-500/50">
-              <p className="text-[9px] font-mono text-cyan-500/50 tracking-widest mb-2">// MISSION_STATEMENT</p>
-              <p className="text-sm font-mono text-slate-300 leading-relaxed">
-                {personalInfo.bio}
-              </p>
-            </div>
-
-            {/* Interests */}
-            <div className="terminal-panel rounded-none p-4">
-              <p className="text-[9px] font-mono text-cyan-500/50 tracking-widest mb-3">// INTEREST_MODULES</p>
-              <div className="flex flex-wrap gap-2">
-                {INTERESTS.map((item, i) => (
-                  <span
-                    key={i}
-                    className="text-[10px] font-mono text-slate-500 border border-slate-800 px-2.5 py-1 hover:text-cyan-400 hover:border-cyan-500/30 transition-colors"
-                  >
-                    {item}
-                  </span>
-                ))}
+        {/* 3 Core Principles */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {values.map((v, idx) => {
+            const Icon = v.icon;
+            return (
+              <div
+                key={idx}
+                className="cinematic-card p-6 rounded-2xl flex flex-col justify-between"
+              >
+                <div>
+                  <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center mb-4">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <h4 className="text-base font-bold text-white mb-2">{v.title}</h4>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">{v.desc}</p>
+                </div>
               </div>
-            </div>
-
-          </div>
+            );
+          })}
         </div>
 
       </div>

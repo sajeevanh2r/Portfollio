@@ -1,147 +1,205 @@
 import React, { useState, useEffect } from 'react';
-import { personalInfo } from '../data/portfolioData';
+import {
+  Mail,
+  Phone,
+  MapPin,
+  FileDown,
+  ArrowRight,
+  Brain,
+  Sparkles,
+  Layers,
+  Heart,
+  Terminal,
+  Activity
+} from 'lucide-react';
 import { LinkedinIcon, GithubIcon } from './SocialIcons';
+import { personalInfo } from '../data/portfolioData';
 import ThreeDAvatar from './ThreeDAvatar';
-
-const ROLES = personalInfo.roles;
 
 export default function Hero({ onOpenResume }) {
   const [roleIndex, setRoleIndex] = useState(0);
-  const [typed, setTyped] = useState('');
-  const [deleting, setDeleting] = useState(false);
+  const [displayedText, setDisplayedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const current = ROLES[roleIndex];
+    const currentRole = personalInfo.roles[roleIndex];
     let timer;
-    if (deleting) {
+
+    if (isDeleting) {
       timer = setTimeout(() => {
-        setTyped(prev => prev.slice(0, -1));
-        if (typed.length <= 1) { setDeleting(false); setRoleIndex(i => (i + 1) % ROLES.length); }
-      }, 30);
+        setDisplayedText((prev) => prev.substring(0, prev.length - 1));
+        if (displayedText === '') {
+          setIsDeleting(false);
+          setRoleIndex((prev) => (prev + 1) % personalInfo.roles.length);
+        }
+      }, 35);
     } else {
       timer = setTimeout(() => {
-        setTyped(current.slice(0, typed.length + 1));
-        if (typed === current) setTimeout(() => setDeleting(true), 2000);
-      }, 65);
+        setDisplayedText(currentRole.substring(0, displayedText.length + 1));
+        if (displayedText === currentRole) {
+          setTimeout(() => setIsDeleting(true), 2000);
+        }
+      }, 70);
     }
+
     return () => clearTimeout(timer);
-  }, [typed, deleting, roleIndex]);
+  }, [displayedText, isDeleting, roleIndex]);
 
   return (
-    <section id="hero" className="relative min-h-screen pt-20 pb-16 flex items-center overflow-hidden">
+    <section id="hero" className="relative min-h-screen pt-32 pb-20 flex flex-col justify-center items-center overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10">
+        
+        {/* Floating Personality Bubbles (Ambient Life) */}
+        <div className="hidden xl:block absolute top-28 left-8 cinematic-pill px-4 py-2 rounded-2xl animate-float-slow text-xs text-slate-300 pointer-events-none">
+          ✨ "I build systems to solve real problems."
+        </div>
+        <div className="hidden xl:block absolute bottom-36 left-12 cinematic-pill px-4 py-2 rounded-2xl animate-float-reverse text-xs text-slate-300 pointer-events-none">
+          ☕ Code • Data • Continuous Evolution
+        </div>
+        <div className="hidden xl:block absolute top-36 right-8 cinematic-pill px-4 py-2 rounded-2xl animate-float-reverse text-xs text-slate-300 pointer-events-none">
+          🧠 "Always curious about AI & ML."
+        </div>
+        <div className="hidden xl:block absolute bottom-32 right-12 cinematic-pill px-4 py-2 rounded-2xl animate-float-slow text-xs text-slate-300 pointer-events-none">
+          🚀 Data → Insights → Scalable Impact
+        </div>
 
-        {/* Grid layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-
-          {/* ── LEFT: BIO & IDENTITY ── */}
-          <div className="space-y-6 order-2 lg:order-1">
-
-            {/* System tag */}
-            <div className="flex items-center gap-3 text-[10px] font-mono text-cyan-500/60 tracking-widest">
-              <span className="w-6 h-px bg-cyan-500/40" />
-              IDENTITY_UNIT // SAJEEVAN_OS v2.6
-              <span className="w-6 h-px bg-cyan-500/40" />
+        {/* 2-Column Hero Structure */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          {/* Left Column: Personal Narrative & CTAs (7 cols) */}
+          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+            
+            {/* Live Digital Identity HUD */}
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-2xl cinematic-pill text-xs font-mono">
+              <span className="flex items-center gap-1.5 text-emerald-400 font-semibold">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                ONLINE
+              </span>
+              <span className="text-slate-600">|</span>
+              <span className="text-slate-300">
+                CURRENTLY: <span className="text-cyan-400">Exploring RAG & Mobile Architecture</span>
+              </span>
             </div>
 
             {/* Name */}
             <div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-mono tracking-tight leading-none">
-                <span className="text-white glitch" data-text="RADHAKRISHNAN">RADHAKRISHNAN</span>
+              <p className="text-xs font-mono uppercase tracking-widest text-cyan-400 mb-2 font-semibold">
+                Developer • Data Scientist • Innovator
+              </p>
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-tight">
+                <span className="text-gradient-cyan">RADHAKRISHNAN</span>
                 <br />
-                <span className="text-cyan-400 text-glow-cyan">SAJEEVAN</span>
+                <span className="text-white">SAJEEVAN</span>
               </h1>
             </div>
 
             {/* Typing Role */}
-            <div className="flex items-center gap-2 h-8">
-              <span className="text-cyan-500/50 font-mono text-sm">&gt;_</span>
-              <span className="font-mono text-base text-slate-200">
-                {typed}
-                <span className="cursor-blink text-cyan-400">|</span>
-              </span>
+            <div className="flex items-center justify-center lg:justify-start">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-slate-100 font-mono text-base sm:text-lg">
+                <Brain className="w-4 h-4 text-cyan-400 animate-pulse" />
+                <span>
+                  {displayedText}
+                  <span className="inline-block w-2 h-4 ml-1 bg-cyan-400 animate-pulse align-middle"></span>
+                </span>
+              </div>
             </div>
 
-            {/* Bio terminal block */}
-            <div className="terminal-panel rounded-none border-l-2 border-l-cyan-500/60 border-t-0 border-r-0 border-b-0 pl-4 py-3 space-y-1">
-              <p className="text-[10px] font-mono text-cyan-500/50 tracking-widest">// SYSTEM_BIO</p>
-              <p className="text-sm font-mono text-slate-300 leading-relaxed">
-                Dual-degree undergraduate in <span className="text-cyan-400">Data Science</span> (NIBM) &amp;{' '}
-                <span className="text-cyan-400">MIS</span> (NSBM). Engineering ML pipelines, RAG assistants,
-                and cross-platform mobile systems.
-              </p>
-            </div>
+            {/* Narrative Bio */}
+            <p className="text-base sm:text-lg text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              Pursuing dual degrees in <strong className="text-white">Data Science (NIBM)</strong> and <strong className="text-white">Management Information Systems (NSBM)</strong>. 
+              Passionate about turning complex data workflows into intelligent systems and crafting smooth mobile experiences with <span className="text-cyan-300 font-medium">Flutter</span> & <span className="text-blue-300 font-medium">Python</span>.
+            </p>
 
-            {/* Status grid */}
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                { label: 'STATUS', value: 'OPERATIONAL', color: 'text-emerald-400' },
-                { label: 'LOCATION', value: 'COLOMBO, LK', color: 'text-slate-300' },
-                { label: 'DEGREES', value: 'DUAL // MIS + DS', color: 'text-cyan-400' },
-                { label: 'PROJECTS', value: '10 COMPLETED', color: 'text-cyan-400' },
-              ].map((item, i) => (
-                <div key={i} className="terminal-panel px-3 py-2 space-y-0.5">
-                  <p className="text-[9px] font-mono text-slate-600 tracking-widest">{item.label}</p>
-                  <p className={`text-[11px] font-mono font-bold ${item.color}`}>{item.value}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Action buttons */}
-            <div className="flex flex-wrap gap-3 pt-2">
+            {/* Primary Action Buttons */}
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
               <a
                 href="#projects"
-                data-cursor="EXPLORE"
-                className="px-5 py-2.5 text-xs font-mono tracking-widest text-[#050608] bg-cyan-400 hover:bg-cyan-300 transition-colors font-bold"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-blue-600 via-sky-500 to-cyan-400 text-white font-semibold text-sm shadow-xl shadow-blue-500/25 hover:shadow-cyan-500/40 hover:scale-105 active:scale-95 transition-all duration-200"
               >
-                [ MEMORY_CORE ]
+                <span>Things I Built (10)</span>
+                <ArrowRight className="w-4 h-4" />
               </a>
+
               <button
                 onClick={onOpenResume}
-                data-cursor="CV"
-                className="px-5 py-2.5 text-xs font-mono tracking-widest text-cyan-400 border border-cyan-500/50 hover:border-cyan-400 hover:bg-cyan-500/5 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full cinematic-card text-slate-200 font-semibold text-sm hover:border-cyan-400 hover:text-white hover:scale-105 transition-all"
               >
-                [ VIEW CV ]
+                <FileDown className="w-4 h-4 text-cyan-400" />
+                <span>View / Print CV</span>
               </button>
+
               <a
                 href="#contact"
-                data-cursor="CONNECT"
-                className="px-5 py-2.5 text-xs font-mono tracking-widest text-slate-400 border border-slate-700 hover:border-slate-500 hover:text-slate-200 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-semibold text-sm border border-white/10 transition-all"
               >
-                [ CONNECT ]
+                <Mail className="w-4 h-4 text-blue-400" />
+                <span>Let's Talk</span>
               </a>
             </div>
 
-            {/* Social links */}
-            <div className="flex items-center gap-4 pt-1">
-              <a href={`mailto:${personalInfo.email}`} className="text-[10px] font-mono text-slate-500 hover:text-cyan-400 transition-colors">
-                {personalInfo.email}
+            {/* Quick Location & Social Strip */}
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs font-mono text-slate-400 pt-2">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg cinematic-pill">
+                <MapPin className="w-3.5 h-3.5 text-rose-400" />
+                <span>{personalInfo.location}</span>
+              </div>
+
+              <a
+                href={`mailto:${personalInfo.email}`}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg cinematic-pill hover:text-cyan-300 transition-colors"
+              >
+                <Mail className="w-3.5 h-3.5 text-cyan-400" />
+                <span className="truncate max-w-[200px]">{personalInfo.email}</span>
               </a>
-              <a href={personalInfo.github} target="_blank" rel="noreferrer" className="text-slate-500 hover:text-slate-200 transition-colors">
-                <GithubIcon className="w-4 h-4" />
+
+              <a
+                href={personalInfo.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg cinematic-pill hover:text-blue-300 transition-colors"
+              >
+                <LinkedinIcon className="w-3.5 h-3.5 text-blue-400" />
+                <span>LinkedIn</span>
               </a>
-              <a href={personalInfo.linkedin} target="_blank" rel="noreferrer" className="text-slate-500 hover:text-slate-200 transition-colors">
-                <LinkedinIcon className="w-4 h-4" />
+
+              <a
+                href={personalInfo.github}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg cinematic-pill hover:text-purple-300 transition-colors"
+              >
+                <GithubIcon className="w-3.5 h-3.5 text-purple-400" />
+                <span>GitHub</span>
               </a>
             </div>
+
           </div>
 
-          {/* ── RIGHT: 3D ROBOT ── */}
-          <div className="order-1 lg:order-2 flex justify-center">
+          {/* Right Column: 3D Orbital Center Avatar (5 cols) */}
+          <div className="lg:col-span-5 flex justify-center items-center">
             <ThreeDAvatar />
           </div>
+
         </div>
 
-        {/* Bottom system status bar */}
-        <div className="mt-16 border-t border-cyan-500/10 pt-4 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-6 text-[10px] font-mono text-slate-600">
-            <span>NEURAL_NETWORK: <span className="text-emerald-400">ONLINE</span></span>
-            <span>CODE_ENGINE: <span className="text-emerald-400">ONLINE</span></span>
-            <span>CREATIVE_CORE: <span className="text-emerald-400">ONLINE</span></span>
-          </div>
-          <div className="text-[10px] font-mono text-slate-700">
-            SAJEEVAN_OS // BUILD 2026.09
-          </div>
+        {/* 4 Core Life / Identity KPI Cards */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto mt-16">
+          {personalInfo.stats.map((stat, idx) => (
+            <div
+              key={idx}
+              className="cinematic-card p-5 rounded-2xl text-center relative overflow-hidden group"
+            >
+              <div className="text-3xl sm:text-4xl font-extrabold text-white font-mono tracking-tight mb-1 group-hover:text-cyan-300 transition-colors">
+                {stat.value}
+              </div>
+              <div className="text-xs font-semibold text-slate-200 uppercase tracking-wider mb-0.5">
+                {stat.label}
+              </div>
+              <div className="text-[11px] text-slate-400">
+                {stat.subtext}
+              </div>
+            </div>
+          ))}
         </div>
 
       </div>

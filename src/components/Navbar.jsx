@@ -1,107 +1,151 @@
 import React, { useState, useEffect } from 'react';
-
-const NAV_LINKS = [
-  { id: 'hero',       label: 'HOME',       code: '01' },
-  { id: 'projects',   label: 'MEMORY_CORE', code: '02' },
-  { id: 'skills',     label: 'NEURAL_CORE', code: '03' },
-  { id: 'about',      label: 'HUMAN_CORE',  code: '04' },
-  { id: 'experience', label: 'SYS_LOGS',   code: '05' },
-  { id: 'education',  label: 'UPGRADES',   code: '06' },
-  { id: 'contact',    label: 'CONNECT',    code: '07' },
-];
+import { Menu, X, FileText, ArrowRight } from 'lucide-react';
+import { personalInfo } from '../data/portfolioData';
 
 export default function Navbar({ onOpenResume }) {
-  const [active, setActive] = useState('hero');
+  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
+
+  const navLinks = [
+    { name: 'About Me', href: '#about' },
+    { name: 'Things I Built', href: '#projects' },
+    { name: 'Inside My Mind', href: '#skills' },
+    { name: 'My Journey', href: '#experience' },
+    { name: 'Education', href: '#education' },
+    { name: 'Mentors', href: '#references' },
+    { name: "Let's Talk", href: '#contact' },
+  ];
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 30);
-      const scrollY = window.scrollY + 200;
-      for (const link of NAV_LINKS) {
-        const el = document.getElementById(link.id);
-        if (el && scrollY >= el.offsetTop && scrollY < el.offsetTop + el.offsetHeight) {
-          setActive(link.id);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+
+      const sections = ['hero', 'about', 'projects', 'skills', 'experience', 'education', 'references', 'contact'];
+      const scrollPosition = window.scrollY + 200;
+
+      for (const section of sections) {
+        const el = document.getElementById(section);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveSection(section);
+            break;
+          }
         }
       }
     };
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-[#050608]/90 backdrop-blur-md border-b border-cyan-500/10' : 'bg-transparent'
+        scrolled
+          ? 'bg-[#08090d]/80 backdrop-blur-xl border-b border-white/5 shadow-2xl py-3'
+          : 'bg-transparent py-5'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
-
-        {/* Logo */}
-        <a href="#hero" className="flex items-center gap-3 group">
-          <div className="w-7 h-7 border border-cyan-500/60 flex items-center justify-center group-hover:border-cyan-400 transition-colors">
-            <span className="text-[10px] text-cyan-400 font-mono font-bold">RS</span>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        
+        {/* Brand */}
+        <a href="#hero" className="flex items-center gap-2.5 group">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 p-[1px]">
+            <div className="w-full h-full bg-[#08090d] rounded-[11px] flex items-center justify-center">
+              <span className="font-mono font-bold text-xs text-gradient-cyan">RS</span>
+            </div>
           </div>
-          <span className="text-xs text-cyan-500/70 font-mono tracking-widest hidden sm:block">SAJEEVAN_OS</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+          <div>
+            <div className="font-bold text-sm text-white group-hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+              <span>Sajeevan</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+            </div>
+            <p className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Data & Mobile</p>
+          </div>
         </a>
 
-        {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-0.5">
-          {NAV_LINKS.map((link) => {
-            const isActive = active === link.id;
+        {/* Desktop Links */}
+        <nav className="hidden lg:flex items-center gap-1 cinematic-pill px-3 py-1.5 rounded-full">
+          {navLinks.map((link) => {
+            const sectionId = link.href.substring(1);
+            const isActive = activeSection === sectionId;
             return (
               <a
-                key={link.id}
-                href={`#${link.id}`}
-                className={`px-3 py-1.5 text-[10px] tracking-widest transition-all font-mono ${
+                key={link.name}
+                href={link.href}
+                className={`px-3.5 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
                   isActive
-                    ? 'text-cyan-400 border-b border-cyan-400'
-                    : 'text-slate-500 hover:text-slate-300'
+                    ? 'text-white bg-white/10 shadow-sm border border-white/10'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
                 }`}
               >
-                {isActive && <span className="text-cyan-600 mr-1">&gt;_</span>}
-                {link.label}
+                {link.name}
               </a>
             );
           })}
         </nav>
 
-        {/* Right Actions */}
-        <div className="flex items-center gap-3">
+        {/* Action Buttons */}
+        <div className="hidden sm:flex items-center gap-3">
           <button
             onClick={onOpenResume}
-            data-cursor="CV"
-            className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-[10px] tracking-widest font-mono text-cyan-400 border border-cyan-500/40 hover:border-cyan-400 hover:bg-cyan-500/5 transition-all"
+            className="flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700/80 transition-all hover:border-slate-500"
           >
-            [ VIEW CV ]
+            <FileText className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Resume</span>
           </button>
-
-          {/* Mobile toggle */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="lg:hidden text-cyan-500 font-mono text-xs border border-cyan-500/30 px-2 py-1"
+          <a
+            href="#contact"
+            className="flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 via-sky-500 to-cyan-400 text-white shadow-lg shadow-blue-500/20 hover:shadow-cyan-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
-            {menuOpen ? '[ X ]' : '[ ≡ ]'}
+            <span>Let's Talk</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </a>
+        </div>
+
+        {/* Mobile menu trigger */}
+        <div className="flex lg:hidden items-center gap-2">
+          <button
+            onClick={onOpenResume}
+            className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300"
+          >
+            <FileText className="w-4 h-4 text-cyan-400" />
+          </button>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white"
+          >
+            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
+
       </div>
 
       {/* Mobile Drawer */}
-      {menuOpen && (
-        <div className="lg:hidden bg-[#050608]/95 backdrop-blur border-b border-cyan-500/15 px-4 py-4 space-y-1">
-          {NAV_LINKS.map((link) => (
+      {isOpen && (
+        <div className="lg:hidden cinematic-card border-b border-white/10 mt-2 px-4 py-4 space-y-2">
+          {navLinks.map((link) => (
             <a
-              key={link.id}
-              href={`#${link.id}`}
-              onClick={() => setMenuOpen(false)}
-              className="block py-2 text-xs font-mono text-slate-400 hover:text-cyan-400 transition-colors tracking-widest border-b border-slate-900"
+              key={link.name}
+              href={link.href}
+              onClick={() => setIsOpen(false)}
+              className="block px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors"
             >
-              <span className="text-cyan-600/50 mr-2">{link.code}</span>
-              {link.label}
+              {link.name}
             </a>
           ))}
+          <div className="pt-2 border-t border-slate-800">
+            <a
+              href="#contact"
+              onClick={() => setIsOpen(false)}
+              className="block w-full text-center py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-400 text-white text-xs font-semibold"
+            >
+              Let's Talk
+            </a>
+          </div>
         </div>
       )}
     </header>

@@ -1,140 +1,122 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { personalInfo } from '../data/portfolioData';
-import { LinkedinIcon, GithubIcon } from './SocialIcons';
+import { Sparkles, FolderGit2, Brain, Compass, User, Activity } from 'lucide-react';
 
 export default function ThreeDAvatar() {
   const containerRef = useRef(null);
-  const [rot, setRot] = useState({ x: 0, y: 0 });
-  const [hovered, setHovered] = useState(false);
-  const [eyePos, setEyePos] = useState({ x: 50, y: 50 });
+  const [rotateX, setRotateX] = useState(0);
+  const [rotateY, setRotateY] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
-  useEffect(() => {
-    const onMouseMove = (e) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = e.clientX - cx;
-      const dy = e.clientY - cy;
+  const handleMouseMove = (e) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
 
-      // Tilt based on mouse from center of avatar
-      setRot({
-        x: (dy / window.innerHeight) * -14,
-        y: (dx / window.innerWidth) * 16,
-      });
+    const rotX = ((y - centerY) / centerY) * -12;
+    const rotY = ((x - centerX) / centerX) * 12;
 
-      // Eye tracking — map to ±30% range
-      const eyeX = 50 + (dx / window.innerWidth) * 40;
-      const eyeY = 50 + (dy / window.innerHeight) * 40;
-      setEyePos({
-        x: Math.max(30, Math.min(70, eyeX)),
-        y: Math.max(30, Math.min(70, eyeY)),
-      });
-    };
+    setRotateX(rotX);
+    setRotateY(rotY);
+  };
 
-    window.addEventListener('mousemove', onMouseMove);
-    return () => window.removeEventListener('mousemove', onMouseMove);
-  }, []);
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setRotateX(0);
+    setRotateY(0);
+  };
 
   return (
     <div
+      className="relative w-full max-w-[440px] mx-auto py-8"
+      style={{ perspective: '1200px' }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
       ref={containerRef}
-      className="relative w-full max-w-[380px] mx-auto"
-      style={{ perspective: '1000px' }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
     >
-      {/* 3D tilting wrapper */}
+      {/* 3D Tilting Frame */}
       <div
-        className="transition-transform duration-200 ease-out"
+        className="relative transition-transform duration-200 ease-out will-change-transform flex items-center justify-center"
         style={{
-          transform: `rotateX(${rot.x}deg) rotateY(${rot.y}deg)`,
+          transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg) ${isHovered ? 'scale3d(1.02, 1.02, 1.02)' : 'scale3d(1, 1, 1)'}`,
           transformStyle: 'preserve-3d',
         }}
       >
-        {/* Outer glow border */}
-        <div className="relative robot-float" style={{ transformStyle: 'preserve-3d' }}>
-          {/* Ambient glow behind */}
-          <div
-            className="absolute -inset-6 rounded-2xl bg-cyan-500/8 blur-3xl"
-            style={{ transform: 'translateZ(-60px)' }}
-          />
+        {/* Soft Ambient Halo */}
+        <div
+          className="absolute -inset-6 rounded-full bg-gradient-to-tr from-cyan-500/15 via-blue-600/20 to-purple-600/20 blur-3xl opacity-80 -z-10"
+          style={{ transform: 'translateZ(-40px)' }}
+        />
 
-          {/* Corner HUD brackets */}
-          <div className="absolute -top-2 -left-2 w-5 h-5 border-t-2 border-l-2 border-cyan-400/80" style={{ transform: 'translateZ(20px)' }} />
-          <div className="absolute -top-2 -right-2 w-5 h-5 border-t-2 border-r-2 border-cyan-400/80" style={{ transform: 'translateZ(20px)' }} />
-          <div className="absolute -bottom-2 -left-2 w-5 h-5 border-b-2 border-l-2 border-cyan-400/80" style={{ transform: 'translateZ(20px)' }} />
-          <div className="absolute -bottom-2 -right-2 w-5 h-5 border-b-2 border-r-2 border-cyan-400/80" style={{ transform: 'translateZ(20px)' }} />
-
-          {/* Main robot image frame */}
-          <div className="relative overflow-hidden rounded border border-cyan-500/25 bg-[#050608]">
+        {/* Central Character Card */}
+        <div
+          className="relative rounded-3xl p-[1px] bg-gradient-to-b from-cyan-400/30 via-white/10 to-purple-500/20 shadow-2xl overflow-hidden max-w-[300px] w-full"
+          style={{ transform: 'translateZ(15px)' }}
+        >
+          <div className="relative rounded-[23px] overflow-hidden bg-[#08090d] aspect-[9/13]">
             <img
               src="./assets/ai-avatar.jpg"
-              alt="Sajeevan AI Avatar"
-              className="w-full object-cover object-top aspect-[3/4]"
+              alt="Radhakrishnan Sajeevan"
+              className="w-full h-full object-cover object-top scale-105 transition-transform duration-700 hover:scale-110"
             />
 
-            {/* Eye tracking overlay — subtle red glow follows cursor */}
-            <div
-              className="absolute w-12 h-4 rounded-full bg-rose-500/40 blur-md transition-all duration-150 pointer-events-none"
-              style={{
-                left: `calc(${eyePos.x}% - 24px)`,
-                top: `calc(${eyePos.y * 0.4}% + 12%)`,
-              }}
-            />
+            {/* Gradient Overlays */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#08090d] via-transparent to-transparent opacity-90" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#08090d]/40 via-transparent to-transparent" />
 
-            {/* Scanline overlay */}
-            <div className="absolute inset-0 scanlines pointer-events-none" />
-
-            {/* Bottom gradient */}
-            <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#050608] via-[#050608]/60 to-transparent" />
-
-            {/* Bottom HUD status bar */}
-            <div
-              className="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-none"
-              style={{ transform: 'translateZ(30px)' }}
-            >
-              <div className="flex items-center gap-1.5 px-2 py-1 text-[9px] font-mono text-cyan-400 border border-cyan-500/30 bg-black/70 backdrop-blur-sm tracking-widest">
-                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
-                AI_CORE_ONLINE
-              </div>
-              <div className="text-[9px] font-mono text-slate-500 px-2 py-1 border border-slate-800 bg-black/70">
-                v2.6 // ML
-              </div>
+            {/* Bottom ID Badge */}
+            <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl cinematic-card text-center" style={{ transform: 'translateZ(30px)' }}>
+              <p className="text-xs font-bold text-white tracking-wide uppercase">Radhakrishnan Sajeevan</p>
+              <p className="text-[10px] font-mono text-cyan-400">Data Scientist & Mobile Architect</p>
             </div>
-
-            {/* Top system tag */}
-            <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-              <div className="text-[9px] font-mono text-cyan-500/60 tracking-widest">NEURAL_IDENTITY</div>
-              <div className="text-[9px] font-mono text-slate-600">60 FPS</div>
-            </div>
-          </div>
-
-          {/* Floating side badges with 3D depth */}
-          <div
-            className="absolute -right-4 top-1/4 flex items-center gap-1.5 px-2.5 py-1.5 text-[10px] font-mono bg-[#050608] border border-cyan-500/35 text-cyan-300 whitespace-nowrap"
-            style={{ transform: 'translateZ(40px)' }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            PYTORCH // RAG
-          </div>
-
-          <div
-            className="absolute -left-4 top-1/2 flex items-center gap-1.5 px-2.5 py-1.5 text-[10px] font-mono bg-[#050608] border border-cyan-500/35 text-cyan-300 whitespace-nowrap"
-            style={{ transform: 'translateZ(40px)' }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-            FLUTTER // DART
-          </div>
-
-          <div
-            className="absolute -right-4 top-2/3 flex items-center gap-1.5 px-2.5 py-1.5 text-[10px] font-mono bg-[#050608] border border-emerald-500/35 text-emerald-300 whitespace-nowrap"
-            style={{ transform: 'translateZ(40px)' }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            NIBM // NSBM
           </div>
         </div>
+
+        {/* 4 Orbital Navigation Nodes */}
+        
+        {/* Top: PROJECTS */}
+        <a
+          href="#projects"
+          className="absolute -top-3 left-1/2 -translate-x-1/2 cinematic-card px-4 py-2 rounded-full flex items-center gap-2 text-xs font-semibold text-white shadow-xl hover:border-cyan-400 hover:text-cyan-300 transition-all group cursor-pointer"
+          style={{ transform: 'translateZ(50px)' }}
+        >
+          <FolderGit2 className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform" />
+          <span>PROJECTS</span>
+        </a>
+
+        {/* Bottom: JOURNEY */}
+        <a
+          href="#experience"
+          className="absolute -bottom-3 left-1/2 -translate-x-1/2 cinematic-card px-4 py-2 rounded-full flex items-center gap-2 text-xs font-semibold text-white shadow-xl hover:border-indigo-400 hover:text-indigo-300 transition-all group cursor-pointer"
+          style={{ transform: 'translateZ(50px)' }}
+        >
+          <Compass className="w-3.5 h-3.5 text-indigo-400 group-hover:scale-110 transition-transform" />
+          <span>MY JOURNEY</span>
+        </a>
+
+        {/* Left: SKILLS */}
+        <a
+          href="#skills"
+          className="absolute top-1/2 -left-4 sm:-left-8 -translate-y-1/2 cinematic-card px-3.5 py-2 rounded-full flex items-center gap-2 text-xs font-semibold text-white shadow-xl hover:border-emerald-400 hover:text-emerald-300 transition-all group cursor-pointer"
+          style={{ transform: 'translateZ(50px)' }}
+        >
+          <Brain className="w-3.5 h-3.5 text-emerald-400 group-hover:scale-110 transition-transform" />
+          <span>SKILLS</span>
+        </a>
+
+        {/* Right: ABOUT */}
+        <a
+          href="#about"
+          className="absolute top-1/2 -right-4 sm:-right-8 -translate-y-1/2 cinematic-card px-3.5 py-2 rounded-full flex items-center gap-2 text-xs font-semibold text-white shadow-xl hover:border-purple-400 hover:text-purple-300 transition-all group cursor-pointer"
+          style={{ transform: 'translateZ(50px)' }}
+        >
+          <User className="w-3.5 h-3.5 text-purple-400 group-hover:scale-110 transition-transform" />
+          <span>ABOUT</span>
+        </a>
+
       </div>
     </div>
   );

@@ -7,71 +7,104 @@ export default function BackgroundCanvas() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let raf;
+    let animationFrameId;
 
-    let W = canvas.width = window.innerWidth;
-    let H = canvas.height = window.innerHeight;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
 
-    window.addEventListener('resize', () => {
-      W = canvas.width = window.innerWidth;
-      H = canvas.height = window.innerHeight;
-    });
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
 
-    // Data stream particles — vertical falling columns (Matrix-style but subtle)
-    const columns = Math.floor(W / 48);
-    const drops = Array.from({ length: columns }, () => Math.random() * H);
+    window.addEventListener('resize', handleResize);
 
-    const chars = '01アイウエオカキクケコRGBXMLCORE01';
+    // Subtle drifting space dust & stars
+    const particleCount = Math.min(Math.floor((width * height) / 22000), 45);
+    const particles = [];
 
-    let frame = 0;
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
+        radius: Math.random() * 1.5 + 0.5,
+        alpha: Math.random() * 0.5 + 0.2,
+        color: i % 3 === 0 ? '#38bdf8' : i % 3 === 1 ? '#818cf8' : '#ffffff',
+      });
+    }
 
-    const draw = () => {
-      frame++;
-      ctx.clearRect(0, 0, W, H);
+    let mouseX = width / 2;
+    let mouseY = height / 2;
 
-      // Very subtle circuit grid
-      ctx.strokeStyle = 'rgba(34, 211, 238, 0.03)';
-      ctx.lineWidth = 0.5;
-      for (let x = 0; x < W; x += 40) {
-        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
-      }
-      for (let y = 0; y < H; y += 40) {
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
-      }
+    const handleMouseMove = (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    };
 
-      // Sparse falling data glyphs
-      if (frame % 3 === 0) {
-        ctx.font = '11px JetBrains Mono, monospace';
-        for (let i = 0; i < columns; i++) {
-          if (Math.random() > 0.96) {
-            const char = chars[Math.floor(Math.random() * chars.length)];
-            const x = i * 48;
-            const y = drops[i];
+    window.addEventListener('mousemove', handleMouseMove);
 
-            const alpha = 0.06 + Math.random() * 0.08;
-            ctx.fillStyle = `rgba(34, 211, 238, ${alpha})`;
-            ctx.fillText(char, x, y);
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
 
-            drops[i] += 14;
-            if (drops[i] > H + 50) drops[i] = -20;
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.alpha;
+        ctx.fill();
+
+        // Subtle proximity connection lines
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx = p.x - p2.x;
+          const dy = p.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 100) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = '#38bdf8';
+            ctx.globalAlpha = (1 - dist / 100) * 0.12;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
           }
         }
       }
 
-      raf = requestAnimationFrame(draw);
+      ctx.globalAlpha = 1.0;
+      animationFrameId = requestAnimationFrame(render);
     };
 
-    draw();
-    return () => cancelAnimationFrame(raf);
+    render();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animationFrameId);
+    };
   }, []);
 
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-      {/* Deep ambient glows */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[100px]" />
-      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-cyan-500/4 rounded-full blur-[120px]" />
-      {/* Canvas data streams */}
-      <canvas ref={canvasRef} className="w-full h-full opacity-100" />
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      {/* Soft atmospheric glow lights */}
+      <div className="glow-orb w-[700px] h-[700px] -top-48 -left-48 bg-blue-600/10" />
+      <div className="glow-orb w-[650px] h-[650px] top-1/3 -right-48 bg-indigo-600/10" />
+      <div className="glow-orb w-[600px] h-[600px] -bottom-48 left-1/3 bg-cyan-600/10" />
+      <canvas ref={canvasRef} className="w-full h-full opacity-80" />
     </div>
   );
 }

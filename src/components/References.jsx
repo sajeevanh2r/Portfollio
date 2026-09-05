@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { UserCheck, Mail, Phone, Building2, Copy, Check, Quote, Sparkles } from 'lucide-react';
 import { referencesData } from '../data/portfolioData';
 
 export default function References() {
@@ -11,82 +12,95 @@ export default function References() {
   };
 
   return (
-    <section id="references" className="py-24 relative z-10 border-t border-cyan-500/8">
+    <section id="references" className="py-24 relative z-10 border-t border-white/5 bg-[#0a0c12]/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="mb-12">
-          <div className="text-[10px] font-mono text-cyan-500/50 tracking-widest mb-2">// SECTION_07</div>
-          <h2 className="text-3xl sm:text-4xl font-black font-mono text-white tracking-tight">
-            VERIFIED<span className="text-cyan-400">_TRANSMITTERS</span>
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full cinematic-pill text-cyan-400 text-xs font-mono mb-3">
+            <UserCheck className="w-3.5 h-3.5" />
+            <span>ENDORSEMENTS</span>
+          </div>
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+            Words From <span className="text-gradient-cyan">Mentors</span>
           </h2>
-          <p className="mt-2 text-sm font-mono text-slate-500">
-            &gt;_ Peer & supervisor nodes validating system execution and technical capability.
+          <p className="mt-4 text-slate-300 text-base">
+            Verified academic and industry leaders who have supervised and collaborated with me.
           </p>
         </div>
 
         {/* References Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {referencesData.map((ref, idx) => (
             <div
               key={idx}
-              className="terminal-panel p-6 sm:p-8 rounded-none border border-cyan-500/20 hover:border-cyan-400/50 transition-all flex flex-col justify-between bg-[#0a0c10]"
+              className="cinematic-card p-8 rounded-3xl flex flex-col justify-between group"
             >
               <div>
-                <div className="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-900">
-                  <div className="text-[10px] font-mono text-cyan-400 font-bold tracking-widest">
-                    [ TRANSMITTER_{String(idx + 1).padStart(2, '0')} ]
+                <div className="flex items-start justify-between gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-400 p-[1px]">
+                    <div className="w-full h-full bg-[#08090d] rounded-[15px] flex items-center justify-center font-bold font-mono text-cyan-400 text-sm">
+                      {ref.name.split(' ').map(n => n[0]).join('')}
+                    </div>
                   </div>
-                  <span className="text-[9px] font-mono px-2 py-0.5 border border-cyan-500/20 text-cyan-300 bg-cyan-500/5">
-                    {ref.relation.toUpperCase()}
+                  <span className="text-[11px] font-mono px-3 py-1 rounded-full cinematic-pill text-cyan-300">
+                    {ref.relation}
                   </span>
                 </div>
 
-                <h3 className="text-lg font-bold font-mono text-white mb-1">
-                  {ref.name.toUpperCase()}
+                <h3 className="text-xl font-bold text-white mb-1 group-hover:text-cyan-300 transition-colors">
+                  {ref.name}
                 </h3>
-                <p className="text-xs font-mono text-cyan-400 mb-1">
-                  &gt; {ref.title}
+                <p className="text-sm font-semibold text-blue-400 mb-1">
+                  {ref.title}
                 </p>
-                <p className="text-[11px] font-mono text-slate-500 mb-5">
-                  ORG: {ref.organization}
+                <p className="text-xs text-slate-400 flex items-center gap-1.5 mb-6">
+                  <Building2 className="w-3.5 h-3.5 text-slate-500" />
+                  <span>{ref.organization}</span>
                 </p>
 
-                {/* Testimonial Quote */}
-                <div className="p-3.5 border-l-2 border-cyan-500/40 bg-black/40 mb-6">
-                  <p className="text-xs font-mono text-slate-300 italic leading-relaxed">
+                {/* Quote */}
+                <div className="p-4 rounded-2xl bg-black/40 border border-white/5 relative mb-6">
+                  <Quote className="w-5 h-5 text-cyan-500/20 absolute top-3 right-3" />
+                  <p className="text-xs sm:text-sm text-slate-300 italic leading-relaxed">
                     "{ref.quote}"
                   </p>
                 </div>
               </div>
 
-              {/* Contact Actions */}
-              <div className="space-y-2 pt-4 border-t border-slate-900">
-                {/* Email */}
-                <div className="flex items-center justify-between p-2 border border-slate-900 bg-black/50 text-xs font-mono">
-                  <span className="text-slate-400 truncate text-[11px]">
-                    EMAIL: <span className="text-cyan-300">{ref.email}</span>
-                  </span>
+              {/* Actions */}
+              <div className="space-y-2 pt-4 border-t border-white/5">
+                <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs">
+                  <a
+                    href={`mailto:${ref.email}`}
+                    className="flex items-center gap-2 text-slate-300 hover:text-cyan-300 transition-colors font-mono truncate"
+                  >
+                    <Mail className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                    <span className="truncate">{ref.email}</span>
+                  </a>
                   <button
                     onClick={() => handleCopy(ref.email, `email-${idx}`)}
-                    data-cursor="COPY"
-                    className="px-2 py-0.5 text-[9px] font-mono tracking-widest border border-slate-800 hover:border-cyan-400 text-slate-400 hover:text-cyan-400 transition-colors ml-2 shrink-0"
+                    className="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-colors"
+                    title="Copy Email"
                   >
-                    {copiedIndex === `email-${idx}` ? '[ COPIED ]' : '[ COPY ]'}
+                    {copiedIndex === `email-${idx}` ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                   </button>
                 </div>
 
-                {/* Phone */}
-                <div className="flex items-center justify-between p-2 border border-slate-900 bg-black/50 text-xs font-mono">
-                  <span className="text-slate-400 text-[11px]">
-                    COMM: <span className="text-emerald-300">{ref.phone}</span>
-                  </span>
+                <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs">
+                  <a
+                    href={`tel:${ref.phone}`}
+                    className="flex items-center gap-2 text-slate-300 hover:text-emerald-300 transition-colors font-mono"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <span>{ref.phone}</span>
+                  </a>
                   <button
                     onClick={() => handleCopy(ref.phone, `phone-${idx}`)}
-                    data-cursor="COPY"
-                    className="px-2 py-0.5 text-[9px] font-mono tracking-widest border border-slate-800 hover:border-emerald-400 text-slate-400 hover:text-emerald-400 transition-colors ml-2 shrink-0"
+                    className="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-colors"
+                    title="Copy Phone"
                   >
-                    {copiedIndex === `phone-${idx}` ? '[ COPIED ]' : '[ COPY ]'}
+                    {copiedIndex === `phone-${idx}` ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                   </button>
                 </div>
               </div>
